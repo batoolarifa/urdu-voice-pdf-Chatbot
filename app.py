@@ -85,12 +85,12 @@ def user_input_query(query, vector_db):
 
 
 def remove_markdown(text):
-    # Regular expression to remove markdown symbols like *, **
+    
     return re.sub(r"[*_~`]", "", text)
 
 
 def convert_text_to_audio(text, lang="ur"):  
-    # Strip markdown before converting to audio
+    
     sanitized_text = remove_markdown(text)
     tts = gTTS(text=sanitized_text, lang=lang)
     with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_audio_file:
@@ -103,7 +103,7 @@ def main():
     st.markdown("<h1 style='text-align: center; color: white;'>Chat with your PDF 📄</h1>", unsafe_allow_html=True)
     st.markdown("<h2 style='text-align: center; color:red;'>Upload your PDF 👇</h2>", unsafe_allow_html=True)
 
-    # Custom CSS for button styling
+    
     st.markdown("""
         <style>
         .custom-button {
