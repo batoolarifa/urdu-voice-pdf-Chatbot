@@ -1,5 +1,6 @@
 import streamlit as st
 import os
+import re 
 from langchain_community.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface.embeddings import HuggingFaceEmbeddings
@@ -17,11 +18,13 @@ import tempfile
 # Load environment variables
 load_dotenv()
 
+
 headers = {
     "authorization":st.secrets['GOOGLE_API_KEY'],
     "content-type": "application/json",
  }
 genai_api_key = genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
 
 
 
@@ -38,11 +41,6 @@ def process_pdf_and_store_in_faiss(pdf_path):
     faiss_index_path = "faiss_index"
     vector_db.save_local(faiss_index_path)
     return vector_db, docs_chunks
-
-
-
-
-
 
 
 def get_conversational_chain_urdu():
@@ -69,6 +67,7 @@ def get_conversational_chain_urdu():
     
     return qa_chain
 
+
 def user_input_query(query, vector_db):
     
     relevant_documents = vector_db.similarity_search(query, k=5)
@@ -85,13 +84,19 @@ def user_input_query(query, vector_db):
     return response_text
 
 
+def remove_markdown(text):
+    # Regular expression to remove markdown symbols like *, **
+    return re.sub(r"[*_~`]", "", text)
+
+
 def convert_text_to_audio(text, lang="ur"):  
-    tts = gTTS(text=text, lang=lang)
+    # Strip markdown before converting to audio
+    sanitized_text = remove_markdown(text)
+    tts = gTTS(text=sanitized_text, lang=lang)
     with tempfile.NamedTemporaryFile(suffix=".mp3", delete=False) as temp_audio_file:
         temp_audio_file_path = temp_audio_file.name
         tts.save(temp_audio_file_path)
     return temp_audio_file_path
-
 
 
 def main():
