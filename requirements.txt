@@ -1,0 +1,17 @@
+streamlit
+langchain 
+langchain_community
+sentence_transformers
+langchain_huggingface
+streamlit_chat
+langchain_google_genai
+faiss-cpu 
+numpy
+pypdf
+SpeechRecognition
+pydub
+ffmpeg
+streamlit-mic-recorder
+gtts
+python-dotenv
+google-generativeai
